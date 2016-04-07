@@ -1,0 +1,5 @@
+=uEscrow=
+
+This is a prototype for an anon and trusty escrow service for trading digital assets, powered by smart-contracts. 
+
+More information and specs in [[paper/uEscrow-whitepaper.mediawiki|Whitepaper]]
