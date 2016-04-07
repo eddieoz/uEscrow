@@ -54,7 +54,7 @@ Functions:
 
 2) Check if there's an open escrow
 
-If balances from EscrowID[]\(escrowA\(Deposit Wallet >= Amount expected\) AND escrowB\(Deposit Wallet >= Amount expected\)\) then EscrowID[](Escrow condition = Withdraw)
+If balances from EscrowID[]\(escrowA\(Deposit Wallet >= Amount expected\) AND escrowB\(Deposit Wallet >= Amount expected\)\) then EscrowID[]\(Escrow condition = Withdraw\)
 
 3) Receives a sucessfully transfer for a EscrowID[]\(Escrow condition = Withdraw\)
 
