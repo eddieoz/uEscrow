@@ -100,7 +100,7 @@ We will receive information for two agents, called escrowA and escrowB.
 ** Withdraw wallet
 ** Amount expected
 ** Refund wallet
-* Expiring time  
+* Expiration time
   
 2) Checks if there's an EscrowID[](Escrow condition == Open)
 
