@@ -1,0 +1,126 @@
+<pre>
+  Title  : uEscrow Whitepaper
+  Author : Edilson Osorio Junior <osoriojr@originalmy.com>
+  Status : Draft
+  Type   : Whitepaper
+  Created: 201603406
+</pre>
+
+==Abstract==
+
+Anon and trusty escrow service for trading digital assets, powered by smart-contracts.
+
+==Scope==
+
+* Smart-contract (dapp): agnostic, holds all escrow rules.
+* App: knows the asset rules, connects to smart-contract and execute functions.
+
+==Specs==
+
+===Smart-Contract===
+
+The Smart-Contract layer is a storage with all information about the escrow.
+
+* Escrow ID
+* Timestamp
+* escrowA:
+** Asset1 
+** Withdraw wallet
+** Amount expected
+** Deposit wallet
+** Refund wallet
+* escrowB: 
+** Asset2
+** Withdraw wallet
+** Amount expected
+** Deposit wallet
+** Refund wallet
+* Expiration time 
+* Escrow condition
+** Open
+** Withdraw
+** Expired
+** Executed
+** Error
+
+Functions:
+
+1) Register new escrow:
+
+* Escrow ID
+* Timestamp
+* escrowA:
+** Asset1 
+** Withdraw wallet
+** Amount expected
+** Deposit wallet
+** Refund wallet
+* escrowB: 
+** Asset2
+** Withdraw wallet
+** Amount expected
+** Deposit wallet
+** Refund wallet
+* Expiration time 
+* Escrow condition = Open
+
+2) Check if there's an open escrow
+
+<pre>
+IF balances from EscrowID[](escrowA(Deposit Wallet >= Amount expected) AND escrowB(Deposit Wallet >= Amount expected))
+THEN EscrowID[](Escrow condition = Withdraw)
+</pre>
+
+3) Receives a transfer status for a EscrowID[](Escrow condition = Withdraw)
+
+<pre>
+IF succesfully THEN EscrowID[](Escrow condition = Executed) ELSE EscrowID[](Escrow condition = Error)
+</pre>
+
+4) Check if there's an expired escrow
+
+<pre>
+IF now() > EscrowID[](Expiration time) THEN EscrowID[](Escrow condition = Expired)
+</pre>
+
+===App===
+
+The App know the assets being trade and is responsible for reading information from smart-contract and executing orders. It has 3 simple functions:
+
+1) Create new escrow: Sends the information to the smart-contract with information about new escrow and creates deposit wallets for holding the assets until the condition meets.
+We will receive information for two agents, called escrowA and escrowB.
+
+* escrowA:
+** Asset1
+** Withdraw wallet
+** Amount expected
+** Refund wallet
+* escrowB: 
+** Asset2
+** Withdraw wallet
+** Amount expected
+** Refund wallet
+* Expiring time  
+  
+2) Checks if there's an EscrowID[](Escrow condition == Open)
+
+<pre>
+a. Check balances for EscrowID[](escrowA(Deposit wallet))
+b. Check balances for EscrowID[](escrowB(Deposit wallet)) 
+c. Inform balances to the smart-contract
+</pre>
+
+3) Checks if there's an EscrowID[](Escrow condition == Withdraw)
+
+<pre>
+a. EscrowID[](escrowA(Deposit wallet) send balance to escrowB(Withdraw wallet)) 
+b. EscrowID[](escrowB(Deposit wallet) send balance to escrowA(Withdraw wallet))
+c. Return the transfer status to the Smart-Contract 
+</pre>
+
+4) Checks if there's an EscrowID[](Escrow condition == Expired)
+
+<pre>
+a. EscrowID[](escrowA(Deposit wallet) send balance to escrowA(Refund wallet))
+b. EscrowID[](escrowB(Deposit wallet) send balance to escrowB(Refund wallet))
+</pre>
