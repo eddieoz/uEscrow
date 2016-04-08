@@ -1,0 +1,75 @@
+<!doctype>
+<html>
+	<head>
+	<script type='text/javascript'>
+		web3.eth.defaultAccount = web3.eth.accounts[0];
+		var web3 = parent.web3;
+		var theContract = contracts.uEscrow.contract;
+
+		function getEscrowStatus() {
+			var param = document.getElementById('query').value;
+			var ret = contracts['uEscrow'].contract.escrowStatus(param);
+			document.getElementById('queryStatus').innerText = ret;
+		}
+		
+		function getEscrowOpenedList() {
+			var ret = contracts['uEscrow'].contract.listOpenedEscrows();
+			document.getElementById('queryList').innerText = ret;
+		}
+
+		function getEscrowBalances() {
+			var escrowID = document.getElementById('escrowID2').value;
+			var escrowSide = document.getElementById('escrowSide').value;
+			var ret = contracts['uEscrow'].contract.escrowGetExpectedBalances(escrowID,escrowSide);
+			document.getElementById('queryres').innerText = ret;
+		}
+
+		function sendBalances() {
+
+			var escrowID = document.getElementById('escrowID').value;
+			var escrowADepositAddressBalance = document.getElementById('escrowADepositAddressBalance').value;
+			var escrowBDepositAddressBalance = document.getElementById('escrowBDepositAddressBalance').value;
+			var ret = contracts["uEscrow"].contract.sendBalances( escrowID, escrowADepositAddressBalance, escrowBDepositAddressBalance );
+		}
+
+		</script>
+	</head>
+	<body bgcolor='#E6E6FA'>
+		<h3>uEscrow - Send Balances</h3>
+		<div>
+			<h4>ID</h4>
+			Escrow ID: <input type='number' id='escrowID'><br />
+			<h4>Side A Information</h4>
+			Deposit Address Balance: <input type='number' id='escrowADepositAddressBalance'><br />
+
+			<h4>Side B Information</h4>
+			Deposit Address Balance: <input type='number' id='escrowBDepositAddressBalance'><br />
+
+			<button onclick='sendBalances()'>Send Balances</button>
+		</div>
+		<h3>Query Expected Balances</h3>
+		<div>
+			EscrowID:
+			<input type="number" id='escrowID2'>
+			Side (0 or 1):
+			<input type="number" id='escrowSide'>
+			<button onclick='getEscrowBalances()'>Query Balances</button>
+			<!--<input value='get' type='button' id='query' onclick='get()' />-->
+			<div id='queryres'></div>
+		</div>
+		<h3>Query Condition</h3>
+		<div>
+			EscrowID:
+			<input type="string" id="query" onkeyup='getEscrowStatus()'>
+			<!--<input value='get' type='button' id='query' onclick='get()' />-->
+			<div id='queryStatus'></div>
+		</div>
+		<h3>Query List</h3>
+		<div>
+			List Opened Escrows:
+			<button onclick='getEscrowOpenedList()'>Query List</button>
+			<div id='queryList'></div>
+		</div>
+
+	</body>
+</html>

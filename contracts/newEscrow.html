@@ -1,0 +1,63 @@
+<!doctype>
+<html>
+	<head>
+	<script type='text/javascript'>
+	web3.eth.defaultAccount = web3.eth.accounts[0];
+
+
+	function getEscrowStatus() {
+		var param = document.getElementById('query').value;
+		var ret = contracts['uEscrow'].contract.escrowStatus(param);
+		document.getElementById('queryres').innerText = ret;
+	}
+
+	function newEscrow() {
+		var escrowAAssetName = document.getElementById('escrowAAssetName').value;
+		var escrowAWithdrawAddress = document.getElementById('escrowAWithdrawAddress').value;
+		var escrowAAmount = document.getElementById('escrowAAmount').value;
+		var escrowADepositAddress = document.getElementById('escrowADepositAddress').value;
+		var escrowARefundAddress = document.getElementById('escrowARefundAddress').value;
+		var escrowBAssetName = document.getElementById('escrowBAssetName').value;
+		var escrowBWithdrawAddress = document.getElementById('escrowBWithdrawAddress').value;
+		var escrowBAmount = document.getElementById('escrowBAmount').value;
+		var escrowBDepositAddress = document.getElementById('escrowBDepositAddress').value;
+		var escrowBRefundAddress = document.getElementById('escrowBRefundAddress').value;
+		var expirationTimeInMinutes = document.getElementById('expirationTimeInMinutes').value;
+
+		var ret = contracts["uEscrow"].contract.newEscrow(escrowAAssetName, escrowAWithdrawAddress, escrowAAmount, escrowADepositAddress, escrowARefundAddress, escrowBAssetName, escrowBWithdrawAddress, escrowBAmount, escrowBDepositAddress, escrowBRefundAddress, expirationTimeInMinutes );
+		document.getElementById('escrowID').innerText = ret;
+	}
+
+	</script>
+	</head>
+	<body bgcolor='#E6E6FA'>
+		<h3>uEscrow - New Escrow</h3>
+		<div>
+			<h4>Side A Information</h4>
+			Asset Name: <input type='string' id='escrowAAssetName'><br />
+			Withdraw Adress: <input type='string' id='escrowAWithdrawAddress'><br />
+			Amount: <input type='number' id='escrowAAmount'><br />
+			Deposit Address: <input type='string' id='escrowADepositAddress'><br />
+			Refund address: <input type='string' id='escrowARefundAddress'><br />
+
+			<h4>Side B Information</h4>
+			Asset Name: <input type='string' id='escrowBAssetName'><br />
+			Withdraw Adress: <input type='string' id='escrowBWithdrawAddress'><br />
+			Amount: <input type='number' id='escrowBAmount'><br />
+			Deposit Address: <input type='string' id='escrowBDepositAddress'><br />
+			Refund address: <input type='string' id='escrowBRefundAddress'><br />
+
+			<h4>Expiration time</h4>
+			Expiration time in minutes: <input type='number' id='expirationTimeInMinutes'><br />
+			<button onclick='newEscrow()'>Save New Escrow</button>
+			<div id='escrowID'></div>
+		</div>
+		<h3>Query</h3>
+		<div>
+			EscrowID:
+			<input type="string" id="query" onkeyup='getEscrowStatus()'>
+			<!--<input value='get' type='button' id='query' onclick='get()' />-->
+			<div id='queryres'></div>
+		</div>
+	</body>
+</html>

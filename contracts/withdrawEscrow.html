@@ -1,0 +1,52 @@
+<!doctype>
+<html>
+	<head>
+	<script type='text/javascript'>
+		web3.eth.defaultAccount = web3.eth.accounts[0];
+		var web3 = parent.web3;
+		var theContract = contracts.uEscrow.contract;
+
+		function getEscrowStatus() {
+			var param = document.getElementById('query').value;
+			var ret = contracts['uEscrow'].contract.escrowStatus(param);
+			document.getElementById('queryStatus').innerText = ret;
+		}
+		
+		function getEscrowWithDrawList() {
+			var ret = contracts['uEscrow'].contract.listWithdrawEscrows();
+			document.getElementById('queryList').innerText = ret;
+		}
+
+		function sendwithDrawSuccess() {
+
+			var escrowID = document.getElementById('escrowID').value;
+			var ret = contracts["uEscrow"].contract.sendWithdrawSuccess( escrowID );
+		}
+
+		</script>
+	</head>
+	<body bgcolor='#E6E6FA'>
+		<h3>uEscrow - Withdraw</h3>
+		<div>
+			<h4>ID</h4>
+			Escrow ID: <input type='number' id='escrowID'><br />
+
+			<button onclick='sendwithDrawSuccess()'>Send Success</button>
+		</div>
+	
+		<h3>Query Condition</h3>
+		<div>
+			EscrowID:
+			<input type="string" id="query" onkeyup='getEscrowStatus()'>
+			<!--<input value='get' type='button' id='query' onclick='get()' />-->
+			<div id='queryStatus'></div>
+		</div>
+		<h3>Query List</h3>
+		<div>
+			List Opened Escrows:
+			<button onclick='getEscrowWithDrawList()'>Query List</button>
+			<div id='queryList'></div>
+		</div>
+
+	</body>
+</html>
