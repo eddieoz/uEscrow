@@ -65,6 +65,7 @@ contract uEscrow is owned{
         if (msg.sender != owner) throw;
     }
 
+	/* Creates a new escrow */
 	function newEscrow(string escrowAAssetName, string escrowAWithdrawAddress, uint escrowAAmount, string escrowADepositAddress, string escrowARefundAddress, string escrowBAssetName, string escrowBWithdrawAddress, uint escrowBAmount, string escrowBDepositAddress, string escrowBRefundAddress, uint expirationTimeInMinutes) onlyOwner returns (uint escrowID){
  
 		escrowID = escrows.length++;		
@@ -82,6 +83,7 @@ contract uEscrow is owned{
 		openedEscrowsIndex[escrowID] = arrayIndex;
 	}
 	
+	/* Receive, compares balances and change status to withdraw */
 	function sendBalances(uint escrowID, uint escrowADepositBalance, uint escrowBDepositBalance) onlyOwner {
 		Escrow e = escrows[escrowID];
 		if (escrowADepositBalance >= e.escrowA[0].amount && escrowBDepositBalance >= e.escrowA[1].amount){
@@ -97,11 +99,12 @@ contract uEscrow is owned{
 		}
 	}
 	
+	/* Show the expected balance for any escrow */
 	function escrowGetExpectedBalances(uint escrowID, uint side) constant returns (uint r){
-
 		return escrows[escrowID].escrowA[side].amount;
 	}
 	
+	/* If withdraw == success, it tags the escrow as executed and close it */
 	function sendWithdrawSuccess(uint escrowID) onlyOwner {
 		Escrow e = escrows[escrowID];
 		e.condition = 3;
@@ -112,6 +115,7 @@ contract uEscrow is owned{
 		delete withdrawEscrowsIndex[escrowID];
 	}
 	
+	/* List active sessions */
 	function listOpenedEscrows() constant returns (uint256[] r){
 		return openedEscrows;
 	}
@@ -120,15 +124,14 @@ contract uEscrow is owned{
 		return withdrawEscrows;
 	}
 
-		function listRefundEscrows() constant returns (uint256[] r){
+	function listRefundEscrows() constant returns (uint256[] r){
 		return refundEscrows;
 	}
   
-    function transferOwnership(address newOwner) Owner{
+    function transferOwnership(address newOwner) onlyOwner{
         owner = newOwner;
     }
-        
-        
+	
 	function(){
 		throw;
 	}
